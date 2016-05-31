@@ -1,0 +1,103 @@
+body
+{
+    background-color: #f6f4f1;
+}
+
+.navigation__logo
+{
+    color: #a3bdbd !important;
+}
+
+.navigation__menu a
+{
+    color: #a3bdbd !important;
+}
+
+.photos
+{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.photos__card
+{
+    width: 300px;
+    margin: 10px;
+}
+
+.photos__card > .card-image
+{
+    cursor: pointer;
+}
+
+.photos__content
+{
+    padding: 5px 10px !important;
+    text-align: start;
+}
+
+.hashtags__tag
+{
+    height: auto;
+    line-height: normal;
+    text-transform: none;
+    padding: 3px 5px;
+    margin: 5px 2px;
+}
+
+.tag__search
+{
+    color: #a3bdbd !important;
+}
+
+.tag__search .collapsible-body
+{
+    padding: 5px;
+}
+
+.chosen-tag
+{
+    background-color: #ee6e73;
+}
+
+
+.chosen-tag:hover
+{
+    background-color: #ee6e73;
+    opacity: 0.9;
+}
+
+.search-button
+{
+    height: auto;
+    margin-top: 10px;
+    line-height: normal;
+    text-transform: none;
+    padding: 5px 10px;
+}
+
+.invisible
+{
+    display: none;
+}
+
+.visible-inline
+{
+    display: inline-block;
+}
+
+.visible-block
+{
+    display: block;
+}
+
+.search-options label
+{
+    color: #000;
+}
+
+.search-options p
+{
+    padding: 0;
+}

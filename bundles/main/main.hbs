@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="{{ meta.charset }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page.title }}</title>
+    <meta name="description" content="Test for IDECO">
+
+    <!-- Minimize CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
+
+    <!-- Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <nav class="white">
+        <div class="container">
+            <div class="nav-wrapper navigation">
+                <a href="/" class="brand-logo right navigation__logo">#GALLERY</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="row tag__search">
+        <div class="container">
+            <div class="col s12">
+                <ul class="collapsible" data-collapsible="accordion">
+                    <li>
+                        <div class="collapsible-header">
+                            <i class="material-icons">search</i>
+                            Теги
+                        </div>
+                        <div class="collapsible-body">
+                            {{#each tags}}
+                                <span class="btn white-text hashtags__tag search-tag">{{ this }}</span>
+                            {{/each}}
+                            <button class="btn invisible blue waves-effect waves-light search-button" type="submit" name="action">Искать
+                                <i class="material-icons right">search</i>
+                            </button>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-header">
+                            <i class="material-icons">settings</i>
+                            Опции
+                        </div>
+                        <div class="collapsible-body">
+                            <form action="#" class="search-options">
+                                <p>
+                                    <input name="group1" class="search-options__input" type="radio" id="all-tags" checked>
+                                    <label for="all-tags">Только выбранные теги</label>
+                                </p>
+                                <p>
+                                    <input name="group1" class="search-options__input" type="radio" id="any-tag">
+                                    <label for="any-tag">Есть хотя бы один из тегов</label>
+                                </p>
+                                <p>
+                                    <input name="group1" class="search-options__input" type="radio" id="custom-tags">
+                                    <label for="custom-tags">Свое</label>
+                                </p>
+                            </form>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="row">
+            <div class="col s12 center-align photos">
+            </div>
+        </div>
+        <div class="row center-align">
+            <a class="waves-effect invisible waves-light btn btn-more" id="more">Moar Images</a>
+        </div>
+    </div>
+
+    <div class="pspw-container"></div>
+
+    <!-- Scripts -->
+
+    <!-- JQuery -->
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+    <!-- Minimize JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
+
+    <!-- Custom JS -->
+    <script src="photoswipe.js"></script>
+    <script src="photoswipe-ui-default.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>

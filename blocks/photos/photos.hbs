@@ -1,0 +1,14 @@
+{{#each photos}}
+    <div class="card photos__card" data-id="{{ photoId }}">
+        <div class="card-image">
+            <img src="{{ url }}">
+        </div>
+        <div class="card-content photos__content">
+            <div class="hashtags">
+                {{#each tags}}
+                    <span class="btn white-text hashtags__tag">{{ this }}</span>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+{{/each}}
