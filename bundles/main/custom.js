@@ -18,18 +18,7 @@ function initPage () {
         dataType: 'json',
         data: data
     }).done(function (res) {
-        $('.photos').append($.parseHTML(renderPhotos(res)));
-        var btnMore = document.querySelector('#more');
-        if (res.hasMore) {
-            btnMore.classList.remove('invisible');
-            btnMore.classList.add('visible-inline');
-        } else {
-            btnMore.classList.add('invisible');
-            btnMore.classList.remove('visible-inline');
-        }
-
-        addImageClickHandler();
-
+        changeImagesContent('append', res);
     }).fail(function (err) {
         console.log(err);
     });
@@ -53,17 +42,7 @@ function addMorePhotoClickHandler () {
             dataType: 'json',
             data: data
         }).done(function (res) {
-            $('.photos').append($.parseHTML(renderPhotos(res)));
-            addImageClickHandler();
-
-            var btnMore = document.querySelector('#more');
-            if (res.hasMore) {
-                btnMore.classList.remove('invisible');
-                btnMore.classList.add('visible-inline');
-            } else {
-                btnMore.classList.add('invisible');
-                btnMore.classList.remove('visible-inline');
-            }
+            changeImagesContent('append', res);
         }).fail(function (err) {
             console.log(err);
         });
@@ -108,17 +87,7 @@ $(function () {
                 dataType: 'json',
                 data: data
             }).done(function (res) {
-                $('.photos').html($.parseHTML(renderPhotos(res)));
-                addImageClickHandler();
-
-                var btnMore = document.querySelector('#more');
-                if (res.hasMore) {
-                    btnMore.classList.remove('invisible');
-                    btnMore.classList.add('visible-inline');
-                } else {
-                    btnMore.classList.add('invisible');
-                    btnMore.classList.remove('visible-inline');
-                }
+                changeImagesContent('insert', res);
             }).fail(function (err) {
                 console.log(err);
             })
@@ -186,8 +155,6 @@ function openPhotoSwipe (target) {
     gallery.goTo(images.indexOf(target));
 }
 
-
-
 function addImageClickHandler () {
     $('.pspw-container').html($.parseHTML(renderPSPW()));
     var imageNodes = document.querySelectorAll('.card-image img');
@@ -202,4 +169,23 @@ function addImageClickHandler () {
             openPhotoSwipe(e.target);
         });
     });
+}
+
+function changeImagesContent (method, data) {
+    if (method === 'append') {
+        $('.photos').append($.parseHTML(renderPhotos(data)));
+    }
+    if (method === 'insert') {
+        $('.photos').html($.parseHTML(renderPhotos(data)));
+    }
+    var btnMore = document.querySelector('#more');
+    if (data.hasMore) {
+        btnMore.classList.remove('invisible');
+        btnMore.classList.add('visible-inline');
+    } else {
+        btnMore.classList.add('invisible');
+        btnMore.classList.remove('visible-inline');
+    }
+
+    addImageClickHandler();
 }

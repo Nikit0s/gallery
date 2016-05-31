@@ -100,18 +100,7 @@
 	        dataType: 'json',
 	        data: data
 	    }).done(function (res) {
-	        $('.photos').append($.parseHTML(renderPhotos(res)));
-	        var btnMore = document.querySelector('#more');
-	        if (res.hasMore) {
-	            console.log('here');
-	            btnMore.classList.remove('invisible');
-	            btnMore.classList.add('visible-inline');
-	        } else {
-	            btnMore.classList.add('invisible');
-	            btnMore.classList.remove('visible-inline');
-	        }
-	
-	        addImageClickHandler();
+	        changeImagesContent('append', res);
 	    }).fail(function (err) {
 	        console.log(err);
 	    });
@@ -135,18 +124,7 @@
 	            dataType: 'json',
 	            data: data
 	        }).done(function (res) {
-	            $('.photos').append($.parseHTML(renderPhotos(res)));
-	            addImageClickHandler();
-	
-	            var btnMore = document.querySelector('#more');
-	            if (res.hasMore) {
-	                console.log('here');
-	                btnMore.classList.remove('invisible');
-	                btnMore.classList.add('visible-inline');
-	            } else {
-	                btnMore.classList.add('invisible');
-	                btnMore.classList.remove('visible-inline');
-	            }
+	            changeImagesContent('append', res);
 	        }).fail(function (err) {
 	            console.log(err);
 	        });
@@ -191,18 +169,7 @@
 	                dataType: 'json',
 	                data: data
 	            }).done(function (res) {
-	                $('.photos').html($.parseHTML(renderPhotos(res)));
-	                addImageClickHandler();
-	
-	                var btnMore = document.querySelector('#more');
-	                if (res.hasMore) {
-	                    console.log('here');
-	                    btnMore.classList.remove('invisible');
-	                    btnMore.classList.add('visible-inline');
-	                } else {
-	                    btnMore.classList.add('invisible');
-	                    btnMore.classList.remove('visible-inline');
-	                }
+	                changeImagesContent('insert', res);
 	            }).fail(function (err) {
 	                console.log(err);
 	            });
@@ -264,14 +231,12 @@
 	    };
 	
 	    var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
-	    console.log(gallery);
 	
 	    gallery.init();
 	    gallery.goTo(images.indexOf(target));
 	}
 	
 	function addImageClickHandler() {
-	    console.log('In addImageClickHandler');
 	    $('.pspw-container').html($.parseHTML(renderPSPW()));
 	    var imageNodes = document.querySelectorAll('.card-image img');
 	    var images = [].slice.call(imageNodes);
@@ -285,6 +250,25 @@
 	            openPhotoSwipe(e.target);
 	        });
 	    });
+	}
+	
+	function changeImagesContent(method, data) {
+	    if (method === 'append') {
+	        $('.photos').append($.parseHTML(renderPhotos(data)));
+	    }
+	    if (method === 'insert') {
+	        $('.photos').html($.parseHTML(renderPhotos(data)));
+	    }
+	    var btnMore = document.querySelector('#more');
+	    if (data.hasMore) {
+	        btnMore.classList.remove('invisible');
+	        btnMore.classList.add('visible-inline');
+	    } else {
+	        btnMore.classList.add('invisible');
+	        btnMore.classList.remove('visible-inline');
+	    }
+	
+	    addImageClickHandler();
 	}
 
 /***/ },
