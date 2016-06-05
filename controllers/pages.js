@@ -28,10 +28,10 @@ exports.index = (req, res) => {
 };
 
 exports.getPhotos = (req, res) => {
-    var searchTags = req.query.tags;
-    var result = [];
-    var hasMore = false;
-    var idx = parseInt(req.query.lastId);
+    let searchTags = req.query.tags;
+    let result = [];
+    let hasMore = false;
+    let idx = parseInt(req.query.lastId);
 
     if (req.query.query === '') {
         result = photos.slice(idx + 1, idx + 6);
@@ -41,9 +41,9 @@ exports.getPhotos = (req, res) => {
     }
 
     if (req.query.query === 'any-tag') {
-        var temp = [];
+        let temp = [];
         photos.forEach(function (photo) {
-            for (var i = 0; i < searchTags.length; i++) {
+            for (let i = 0; i < searchTags.length; i++) {
                 if (photo.tags.indexOf(searchTags[i]) >= 0) {
                     temp.push(photo);
                     break;
@@ -63,7 +63,7 @@ exports.getPhotos = (req, res) => {
     }
 
     if (req.query.query === 'all-tags') {
-        var temp = [];
+        let temp = [];
         temp = photos.filter(function (photo) {
             return photo.tags.sort().toString() == searchTags.sort().toString();
         });
@@ -78,7 +78,35 @@ exports.getPhotos = (req, res) => {
             result = result.slice(0, 5);
         }
     }
-    var data = {
+
+    if (req.query.query === 'custom-tags') {
+        let temp = [];
+        console.log(req.query);
+        photos.forEach(function (photo) {
+            let matches = 0;
+            for (let i = 0; i < searchTags.length; i++) {
+                if (photo.tags.indexOf(searchTags[i]) >= 0) {
+                    matches += 1;
+                    if (matches >= parseInt(req.query.tagsCount)) {
+                        temp.push(photo);
+                        break;
+                    }
+                }
+            }
+        });
+
+        temp.forEach(function(photo) {
+            if (photo.photoId > idx) {
+                result.push(photo);
+            }
+        });
+        if (result.length > 5) {
+            hasMore = true;
+            result = result.slice(0, 5);
+        }
+    }
+
+    let data = {
         photos: result,
         hasMore
     };

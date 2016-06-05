@@ -37,8 +37,11 @@
                             {{#each tags}}
                                 <span class="btn white-text hashtags__tag search-tag">{{ this }}</span>
                             {{/each}}
-                            <button class="btn invisible blue waves-effect waves-light search-button" type="submit" name="action">Искать
+                            <button class="btn invisible blue waves-effect waves-light menu-button" id="search-by-tags" type="submit" name="action">Искать
                                 <i class="material-icons right">search</i>
+                            </button>
+                            <button class="btn orange darken-3 waves-effect waves-light menu-button" id="show-all" type="submit" name="action">
+                                Показать все
                             </button>
                         </div>
                     </li>
@@ -59,7 +62,7 @@
                                 </p>
                                 <p>
                                     <input name="group1" class="search-options__input" type="radio" id="custom-tags">
-                                    <label for="custom-tags">Свое</label>
+                                    <label for="custom-tags">Свое количество совпадений<input id="custom-tags-count" type="number" min="1" value="1" class="custom-count"></label>
                                 </p>
                             </form>
                         </div>

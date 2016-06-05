@@ -1,14 +1,38 @@
+'use strict';
+
 const renderPhotos = require('../../blocks/photos/photos.hbs');
 const buttonMore = require('../../blocks/buttonMore/buttonMore.hbs');
 const renderPSPW = require('../../blocks/pspw/pspw.hbs');
 let query = '';
 let chosenTags = [];
+let tagsCount = 1;
+
+$(function () {
+
+    initPage();
+
+    // Запрещаем писать в input
+    document.querySelector('#custom-tags-count').addEventListener('keypress', function (e) {
+        e.preventDefault();
+    });
+
+    // Поиск по хештегам
+    let tagNode = document.querySelectorAll('.search-tag');
+    let tags = [].slice.call(tagNode);
+    tags.forEach(function (tag) {
+        tag.addEventListener('click', searchTagClickHandler);
+    });
+
+    let searchBtn = document.querySelector('#search-by-tags');
+    searchBtn.addEventListener('click', searchButtonClickHandler);
+});
 
 function initPage () {
     query = '';
     addMorePhotoClickHandler();
+    addShowAllClickHandler();
 
-    var data = {
+    let data = {
         query,
         lastId: -1
     };
@@ -24,16 +48,39 @@ function initPage () {
     });
 }
 
+function addShowAllClickHandler () {
+    let btn = document.querySelector('#show-all');
+    btn.addEventListener('click', function () {
+        query = '';
+        chosenTags = [];
+        let data = {
+            query,
+            lastId: -1
+        };
+        $.ajax({
+            url: '/photos',
+            method: 'GET',
+            dataType: 'json',
+            data: data
+        }).done(function (res) {
+            changeImagesContent('insert', res);
+        }).fail(function (err) {
+            console.log(err);
+        });
+    })
+}
+
 function addMorePhotoClickHandler () {
-    var btn = document.querySelector('#more');
+    let btn = document.querySelector('#more');
     if (!btn) {
         return;
     }
     btn.addEventListener('click', function (e) {
-        var lastId = document.querySelector('.photos').lastElementChild.dataset.id;
-        var data = {
+        let lastId = document.querySelector('.photos').lastElementChild.dataset.id;
+        let data = {
             query,
             lastId,
+            tagsCount,
             tags: chosenTags
         };
         $.ajax({
@@ -49,55 +96,45 @@ function addMorePhotoClickHandler () {
     });
 }
 
-$(function () {
-
-    initPage();
-
-    // Поиск по хештегам
-    var tagNode = document.querySelectorAll('.search-tag');
-    var tags = [].slice.call(tagNode);
-    tags.forEach(function (tag) {
-        tag.addEventListener('click', searchTagClickHandler);
+function searchButtonClickHandler () {
+    let chosenTagNodes = document.querySelectorAll('.chosen-tag');
+    chosenTags = [].slice.call(chosenTagNodes).map(function (tag) {
+        return tag.textContent;
     });
-
-    var searchBtn = document.querySelector('.search-button');
-    searchBtn.addEventListener('click', function (e) {
-        var chosenTagNodes = document.querySelectorAll('.chosen-tag');
-        chosenTags = [].slice.call(chosenTagNodes).map(function (tag) {
-            return tag.textContent;
-        });
-        var searchOption;
-        var options = document.querySelectorAll('.search-options__input');
-        for (var i = 0; i < options.length; i++) {
-            if (options[i].checked === true) {
-                searchOption = options[i].id;
-            }
+    let searchOption;
+    let options = document.querySelectorAll('.search-options__input');
+    for (let i = 0; i < options.length; i++) {
+        if (options[i].checked === true) {
+            searchOption = options[i].id;
         }
+    }
 
-        query = searchOption || '';
-        var data = {
-            tags: chosenTags,
-            lastId: -1,
-            query
-        };
-        if (chosenTags.length > 0) {
-            $.ajax({
-                url: '/photos',
-                method: 'GET',
-                dataType: 'json',
-                data: data
-            }).done(function (res) {
-                changeImagesContent('insert', res);
-            }).fail(function (err) {
-                console.log(err);
-            })
-        }
-    });
-
-});
+    query = searchOption || '';
+    let data = {
+        tags: chosenTags,
+        lastId: -1,
+        query
+    };
+    if (searchOption === 'custom-tags') {
+        tagsCount = parseInt(document.querySelector('#custom-tags-count').value);
+        data.tagsCount = tagsCount;
+    }
+    if (chosenTags.length > 0) {
+        $.ajax({
+            url: '/photos',
+            method: 'GET',
+            dataType: 'json',
+            data: data
+        }).done(function (res) {
+            changeImagesContent('insert', res);
+        }).fail(function (err) {
+            console.log(err);
+        })
+    }
+}
 
 function searchTagClickHandler (e) {
-    var tag = e.target;
+    let tag = e.target;
     if (tag.classList.contains('chosen-tag')) {
         tag.classList.remove('chosen-tag');
     } else {
@@ -107,9 +144,9 @@ function searchTagClickHandler (e) {
 }
 
 function handleButtonSearch () {
-    var chosenTagNodes = document.querySelectorAll('.chosen-tag');
-    var chosenTags = [].slice.call(chosenTagNodes);
-    var searchBtn = document.querySelector('.search-button');
+    let chosenTagNodes = document.querySelectorAll('.chosen-tag');
+    let chosenTags = [].slice.call(chosenTagNodes);
+    let searchBtn = document.querySelector('#search-by-tags');
     if (chosenTags.length > 0) {
         if (!searchBtn.classList.contains('visible-block')) {
             searchBtn.classList.remove('invisible');
@@ -124,13 +161,13 @@ function handleButtonSearch () {
 }
 
 function openPhotoSwipe (target) {
-    var imageNodes = document.querySelectorAll('.card-image img');
-    var images = [].slice.call(imageNodes);
+    let imageNodes = document.querySelectorAll('.card-image img');
+    let images = [].slice.call(imageNodes);
 
-    var pswpElement = document.querySelectorAll('.pswp')[0];
+    let pswpElement = document.querySelectorAll('.pswp')[0];
 
     // build items array
-    var items = images.map(function (img) {
+    let items = images.map(function (img) {
         return {
             src: img.src,
             w: 800,
@@ -139,7 +176,7 @@ function openPhotoSwipe (target) {
     });
 
     // define options (if needed)
-    var options = {
+    let options = {
         // history & focus options are disabled on CodePen
         history: false,
         focus: false,
@@ -149,7 +186,7 @@ function openPhotoSwipe (target) {
 
     };
 
-    var gallery = new PhotoSwipe( pswpElement, PhotoSwipeUI_Default, items, options);
+    let gallery = new PhotoSwipe( pswpElement, PhotoSwipeUI_Default, items, options);
 
     gallery.init();
     gallery.goTo(images.indexOf(target));
@@ -157,12 +194,12 @@ function openPhotoSwipe (target) {
 
 function addImageClickHandler () {
     $('.pspw-container').html($.parseHTML(renderPSPW()));
-    var imageNodes = document.querySelectorAll('.card-image img');
-    var images = [].slice.call(imageNodes);
+    let imageNodes = document.querySelectorAll('.card-image img');
+    let images = [].slice.call(imageNodes);
 
     images.forEach(function (img) {
         // Убираем старый обработчик
-        var new_img = img.cloneNode(true);
+        let new_img = img.cloneNode(true);
         img.parentNode.replaceChild(new_img, img);
 
         new_img.addEventListener('click', function(e) {
@@ -178,7 +215,7 @@ function changeImagesContent (method, data) {
     if (method === 'insert') {
         $('.photos').html($.parseHTML(renderPhotos(data)));
     }
-    var btnMore = document.querySelector('#more');
+    let btnMore = document.querySelector('#more');
     if (data.hasMore) {
         btnMore.classList.remove('invisible');
         btnMore.classList.add('visible-inline');

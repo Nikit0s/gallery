@@ -68,8 +68,9 @@ body
     opacity: 0.9;
 }
 
-.search-button
+.menu-button
 {
+    display: block;
     height: auto;
     margin-top: 10px;
     line-height: normal;
@@ -100,6 +101,11 @@ body
 .search-options p
 {
     padding: 0;
+}
+
+.custom-count
+{
+    height: auto !important;
 }/*! PhotoSwipe main CSS by Dmitry Semenov | photoswipe.com | MIT license */
 /*
 	Styles for basic PhotoSwipe functionality (sliding area, open/close transitions)
